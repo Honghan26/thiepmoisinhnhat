@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thiệp Mời Sinh Nhật</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #ffe6f0;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background-color: #ff66b2;
+      border-radius: 50% 50% 50% 50%;
+      animation: float 8s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes float {
+      0% {
+        bottom: -100px;
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        bottom: 110%;
+        opacity: 0;
+      }
+    }
+
+    .card {
+      width: 400px;
+      margin: 150px auto;
+      background-color: #fff0f5;
+      border: 2px solid #ff66b2;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      position: relative;
+      text-align: center;
+      transform: scale(0);
+      animation: openCard 1s ease-out forwards;
+      z-index: 2;
+    }
+
+    @keyframes openCard {
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .card h1 {
+      color: #ff3399;
+      font-family: 'Pacifico', cursive;
+    }
+
+    .card p {
+      font-size: 18px;
+    }
+
+    .bow {
+      width: 100px;
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="fireworks"></canvas>
+
+  <!-- Bóng bay -->
+  <script>
+    for (let i = 0; i < 20; i++) {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = `${Math.random() * 100}%`;
+      balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+      balloon.style.animationDuration = `${6 + Math.random() * 4}s`;
+      document.body.appendChild(balloon);
+    }
+  </script>
+
+  <!-- Thiệp -->
+  <div class="card">
+    <img src="https://static.vecteezy.com/system/resources/previews/042/654/473/large_2x/ai-generated-pink-satin-ribbon-bow-free-png.png" alt="Nơ sinh nhật" class="bow">
+    <h1>🎉 Thiệp Mời Sinh Nhật 🎉</h1>
+    <p>Chào <strong id="guestName">bạn</strong>,</p>
+    <p>Bạn được mời đến bữa tiệc sinh nhật đặc biệt của Hồng Hân!</p>
+    <p>⏰ Thời gian: 17:00, Thứ Bảy - 26/04/2025</p>
+    <p>📍 Địa điểm: quán BBQ cô Ba Chi, 20 Trương Công Định, Khóm 6, Phường 2, Sóc Trăng</p>
+    <p>Nhớ đi nhe!!!!! 🎂🎈</p>
+  </div>
+
+  <!-- JS: Tên và pháo hoa -->
+  <script>
+    // Lấy tên từ URL
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+    const name = getQueryParam("ten");
+    document.getElementById("guestName").innerText = name || "bạn";
+
+    // Fireworks
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+
+    function createFirework() {
+      const x = Math.random() * width;
+      const y = Math.random() * height / 2;
+      const count = 100;
+      const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = Math.random() * 4 + 1;
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          color
+        });
+      }
+    }
+
+    function animateFireworks() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+      ctx.fillRect(0, 0, width, height);
+
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.015;
+        if (p.alpha <= 0) particles.splice(i, 1);
+        else {
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+      });
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(animateFireworks);
+    }
+
+    setInterval(createFirework, 1000);
+    animateFireworks();
+  </script>
+
+</body>
+</html>

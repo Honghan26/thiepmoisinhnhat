@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Nhập Tên Của Bạn</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffe6f0;
+      text-align: center;
+      padding: 100px;
+    }
+    input {
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 300px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: #ff66b2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff3385;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎂 Mời bạn nhập tên để xem thiệp mời 🎉</h1>
+  <input type="text" id="nameInput" placeholder="Nhập tên của bạn..." />
+  <br />
+  <button onclick="goToCard()">Xem Thiệp Mời</button>
+
+  <script>
+    function goToCard() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (name) {
+        window.location.href = `thiep-moi.html?ten=${encodeURIComponent(name)}`;
+      } else {
+        alert("Vui lòng nhập tên trước khi tiếp tục!");
+      }
+    }
+  </script>
+
+</body>
+</html>
